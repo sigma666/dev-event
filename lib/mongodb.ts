@@ -44,10 +44,12 @@ if (!global.mongoose) {
 }
 
 /**
- * Get (or create) a singleton Mongoose connection.
+ * Acquire a singleton Mongoose connection, creating and caching it if needed.
  *
- * - Reuses the existing connection if available.
- * - Otherwise, creates a new connection and caches it for future calls.
+ * If a connection is already established it is reused; concurrent callers share
+ * the same in-flight connection attempt when a new connection is being created.
+ *
+ * @returns The active Mongoose connection instance
  */
 export async function connectToDatabase(): Promise<Mongoose> {
   if (cached.conn) {
